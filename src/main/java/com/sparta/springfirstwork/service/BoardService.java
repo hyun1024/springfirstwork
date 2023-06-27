@@ -37,20 +37,6 @@ public class BoardService {
         Board board = findBoard(id);
         return new BoardResponseDto(board);
     }
-//    public List<BoardResponseDto> getBoardsByKeyword(String keyword) {
-//        return boardRepository.findAllByContentsContainsOrderByModifiedAtDesc(keyword).stream().map(BoardResponseDto::new).toList();
-
-//    }
-    public Long deleteBoard(Long id, BoardRequestDto requestDto) {
-        // 해당 메모가 DB에 존재하는지 확인
-        Board board = findBoard(id);
-        if(board != null && checkPassword(board, requestDto)) {
-            boardRepository.delete(board);
-            return id;
-        } else {
-            throw new IllegalArgumentException("없는 게시글입니다.");
-        }
-    }
     @Transactional
     public Long updateBoard(Long id, BoardRequestDto requestDto) {
         // 해당 메모가 DB에 존재하는지 확인
@@ -63,6 +49,16 @@ public class BoardService {
             throw new IllegalArgumentException("비밀 번호가 틀립니다.");
         }
 
+    }
+    public Long deleteBoard(Long id, BoardRequestDto requestDto) {
+        // 해당 메모가 DB에 존재하는지 확인
+        Board board = findBoard(id);
+        if(board != null && checkPassword(board, requestDto)) {
+            boardRepository.delete(board);
+            return id;
+        } else {
+            throw new IllegalArgumentException("없는 게시글입니다.");
+        }
     }
 
     private Board findBoard(Long id){
